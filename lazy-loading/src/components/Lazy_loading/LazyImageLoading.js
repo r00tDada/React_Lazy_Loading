@@ -1,36 +1,58 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./LazyImageLoading.module.css";
 import Display from "./Display";
 import useLazyImageLoading from "../hooks/useLazyImageLoading";
 import FetchingData from "./FetchingData";
 
 function LazyImageLoading() {
-  const [loading, data, error] = FetchingData("cars");
-
-  const options = {
+  const [query, setQuery] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, data, error, hasMore] = FetchingData(query, pageNumber);
+  const lazy_options = {
     threshold: 0.5,
     root: null,
   };
 
-  useLazyImageLoading(options);
+  const infinite_options = {
+    threshold: 0.2,
+  };
 
-  if (loading) {
-    return <h1>Loading the API...</h1>;
-  }
-  if (error) {
-    return <h1>Error while fetching API...</h1>;
+  const observer = useRef();
+  const lastImageRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber((prevPageNo) => prevPageNo + 1);
+        }
+      }, infinite_options);
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [loading, hasMore]
+  );
+
+  useLazyImageLoading(lazy_options);
+
+  function inputHandler(event) {
+    setQuery(event.target.value);
+    setPageNumber(1);
   }
 
   return (
     <>
-      <div className={styles.body_main}>
-        <h1>Image Lazy Loading</h1>
-        <input type="text"></input>
-        <div className={styles.grid_container}>
-          {data.map((item) => (
-            <Display key={item.id} items={item} />
-          ))}
-        </div>
+      <h1>Image Lazy Loading</h1>
+      <input type="text" value={query} onChange={inputHandler}></input>
+      <div className="row">
+        {data.map((item, index) => {
+          if (data.length === index + 1) {
+            return <Display ref={lastImageRef} key={item.id} items={item} />;
+          } else {
+            return <Display key={item.id} items={item} />;
+          }
+        })}
       </div>
     </>
   );

@@ -1,29 +1,52 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-const API_URL = "https://api.unsplash.com/search/photos?";
 
-const initialState = {
-  loading: true,
-  data: {},
-  error: "",
-};
+function FetchingData(query, pageNumber) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
 
-function FetchingData(query) {
-  const [state, setState] = useState(initialState);
   useEffect(() => {
-    axios
-      .get(
-        `${API_URL}query=${query}&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}&per_page=30`
-      )
+    setData([]);
+  }, [query]);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(false);
+    let cancel;
+    axios({
+      method: "GET",
+      url: "https://api.unsplash.com/search/photos",
+      params: {
+        query: query,
+        page: pageNumber,
+        client_id: process.env.REACT_APP_UNSPLASH_API_KEY,
+        per_page: 30,
+      },
+      cancelToken: new axios.CancelToken((c) => (cancel = c)),
+    })
       .then((response) => {
-        setState({ loading: false, data: response.data.results, error: "" });
+        const resp = response.data.results;
+        for (let img of resp) {
+          setData((prevData) => {
+            return [...prevData, img];
+          });
+        }
+        setLoading(false);
+        setError(false);
+        setHasMore(resp.length > 0);
       })
       .catch((error) => {
         console.log(error);
-        setState({ loading: false, data: {}, error: "something went wrong" });
+        if (axios.isCancel(error)) return;
+        setError(true);
+        setLoading(false);
       });
-  }, []);
-  return [state.loading, state.data, state.error];
+
+    return () => cancel();
+  }, [query, pageNumber]);
+  return [loading, data, error, hasMore];
 }
 
 export default FetchingData;
