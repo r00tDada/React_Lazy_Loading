@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import styles from "./LazyImageLoading.module.css";
 import Display from "./Display";
 import useLazyImageLoading from "../hooks/useLazyImageLoading";
@@ -44,8 +44,15 @@ function LazyImageLoading() {
   return (
     <>
       <h1>Image Lazy Loading</h1>
-      <input type="text" value={query} onChange={inputHandler}></input>
+      <input
+        type="text"
+        value={query}
+        onChange={inputHandler}
+        className={styles.inputbox}
+      ></input>
       <div className="row">
+        {error ? <h1>Something goes wrong</h1> : null}
+        {loading ? <h1>Loading....</h1> : null}
         {data.map((item, index) => {
           if (data.length === index + 1) {
             return <Display ref={lastImageRef} key={item.id} items={item} />;
