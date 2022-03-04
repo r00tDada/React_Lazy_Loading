@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import Modal from "./Modal";
+import ModalComponent from "./ModalComponent";
 const placeHolder = "https://dummyimage.com/500x400/000/fff";
 
 const Display = React.forwardRef(({ items }, ref) => {
-  const [IsModal, setIsModal] = useState(false);
-  const handleShowDialog = () => {
-    setIsModal(true);
-  };
+  const [show, setShow] = useState(false);
+  const openModalHandler = () => setShow(true);
   return (
     <>
-      {IsModal ? (
-        <Modal image={items.urls.raw} description={items.alt_description} />
-      ) : null}
       <img
         ref={ref}
         src={placeHolder}
@@ -19,9 +14,10 @@ const Display = React.forwardRef(({ items }, ref) => {
         className="column lazy_image"
         width="500px"
         height="400px"
-        onClick={() => handleShowDialog()}
+        onClick={() => openModalHandler()}
         alt={items.alt_description}
       />
+      {show && <ModalComponent setIsOpen={setShow} item={items} />}
     </>
   );
 });
