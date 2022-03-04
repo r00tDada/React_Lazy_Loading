@@ -32,7 +32,7 @@
 
 .heading {
   margin: 0;
-  padding: 10px;
+  padding-top: 10px;
   color: #6d43e0;
   font-weight: 500;
   font-size: 20px;
@@ -44,9 +44,16 @@
   color: #000000;
 }
 
+.modalContent h2 {
+  margin: 0px;
+}
+.modalContent p {
+  margin-top: 10px;
+}
+
 .modalImg {
-  width: 900px;
-  height: 400px;
+  width: 700px;
+  height: 350px;
   margin: 5px 30px 30px 30px;
 }
 

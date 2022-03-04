@@ -13,7 +13,6 @@ function FetchingData(query, pageNumber) {
 
   useEffect(() => {
     setLoading(true);
-    setError(false);
     let cancel;
     axios({
       method: "GET",
@@ -38,7 +37,6 @@ function FetchingData(query, pageNumber) {
         setHasMore(resp.length > 0);
       })
       .catch((error) => {
-        console.log(error);
         if (axios.isCancel(error)) return;
         setError(true);
         setLoading(false);
@@ -46,7 +44,17 @@ function FetchingData(query, pageNumber) {
 
     return () => cancel();
   }, [query, pageNumber]);
-  return [loading, data, error, hasMore];
+
+  return [
+    loading,
+    data,
+    error,
+    hasMore,
+    setLoading,
+    setData,
+    setError,
+    setHasMore,
+  ];
 }
 
 export default FetchingData;

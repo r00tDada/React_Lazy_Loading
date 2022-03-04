@@ -16,9 +16,9 @@ function ModalComponent({ setIsOpen, item }) {
               alt={item.alt_description}
               className={styles.modalImg}
             ></img>
-            {item.alt_description}
+            <h2>Uploaded By : {item.user.name}</h2>
+            <p>{item.description}</p>
           </div>
-
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
             Close
           </button>
