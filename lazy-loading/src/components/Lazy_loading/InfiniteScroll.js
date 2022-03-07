@@ -60,17 +60,13 @@ function InfiniteScroll() {
   }, [isLoading]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handlingScrolling);
     return () => {
-      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", handlingScrolling);
     };
   }, []);
 
-  useEffect(() => {
-    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
-  }, [photosData.query]);
-
-  const handleScroll = () => {
+  const handlingScrolling = () => {
     if (
       window.innerHeight + window.scrollY >=
       document.body.offsetHeight - 300
@@ -78,6 +74,10 @@ function InfiniteScroll() {
       setIsLoading(true);
     }
   };
+
+  useEffect(() => {
+    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
+  }, [photosData.query]);
 
   function inputHandler(event) {
     setPhotosData({
