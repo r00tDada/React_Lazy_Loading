@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Display from "./Display";
 import styles from "./LazyImageLoading.module.css";
 import axios from "axios";
@@ -12,10 +12,9 @@ function InfiniteScroll() {
     perPage: 30,
   });
 
-  const loading = useRef(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchingAPI = (query, page, perPage) => {
-    loading.current = true;
     axios({
       method: "GET",
       url: "https://api.unsplash.com/search/photos",
@@ -27,9 +26,6 @@ function InfiniteScroll() {
       },
     })
       .then((data) => {
-        if (!loading.current) {
-          return;
-        }
         if (data) {
           let paginatedData = data.data.results;
           setPhotosData((prev) => {
@@ -39,9 +35,10 @@ function InfiniteScroll() {
                 page === 1
                   ? [...paginatedData]
                   : prev.photos.concat([...paginatedData]),
+              page: prev.page + 1,
             };
           });
-          loading.current = false;
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -55,36 +52,37 @@ function InfiniteScroll() {
   });
 
   useEffect(() => {
+    if (!isLoading) return;
+    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
+  }, [isLoading]);
+
+  useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.addEventListener("scroll", handleScroll);
     };
   }, []);
 
+  useEffect(() => {
+    fetchingAPI(photosData.query, photosData.page, 30);
+  }, [photosData.query]);
+
   const handleScroll = () => {
     if (
-      !loading.current &&
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 300
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 300
     ) {
-      setPhotosData((prev) => {
-        fetchingAPI(prev.query, prev.page + 1, 30);
-        return {
-          ...prev,
-          page: prev.page + 1,
-        };
-      });
+      setIsLoading(true);
     }
   };
 
   function inputHandler(event) {
-    let q = event.target.value;
     setPhotosData({
-      query: q,
+      query: event.target.value,
       photos: [],
       page: 1,
       perPage: 30,
     });
-    fetchingAPI(q, 1, 30);
   }
 
   return (

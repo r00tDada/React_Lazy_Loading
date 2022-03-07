@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import styles from "./LazyImageLoading.module.css";
 import Display from "./Display";
 import useLazyImageLoading from "../hooks/useLazyImageLoading";
@@ -7,16 +7,7 @@ import useFetchingData from "../hooks/useFetchingData";
 function LazyImageLoading() {
   const [query, setQuery] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  const [
-    loading,
-    data,
-    error,
-    hasMore,
-    setLoading,
-    setData,
-    setError,
-    setHasMore,
-  ] = useFetchingData(query, pageNumber);
+  const [loading, data, error, hasMore] = useFetchingData(query, pageNumber);
 
   useLazyImageLoading({
     threshold: 0.5,

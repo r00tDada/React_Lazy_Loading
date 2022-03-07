@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ModalComponent from "./ModalComponent";
+
 const placeHolder = "https://dummyimage.com/500x400/575757/ffffff";
 const imgstyle = {
   padding: "10px",
@@ -8,6 +9,7 @@ const imgstyle = {
   objectFit: "cover",
   cursor: "pointer",
 };
+
 const Display = React.forwardRef(({ items }, ref) => {
   const [show, setShow] = useState(false);
   const openModalHandler = () => setShow(true);
