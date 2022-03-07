@@ -14,8 +14,11 @@ const initialState = {
 function InfiniteScroll() {
   const [photosData, setPhotosData] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [timer, setTimer] = useState(null);
 
-  const fetchingAPI = (query, page, perPage) => {
+  const fetchingAPI = () => {
+    const { query, page, perPage } = photosData;
     if (query === "") return;
     console.log(photosData);
     axios({
@@ -56,42 +59,45 @@ function InfiniteScroll() {
 
   useEffect(() => {
     if (!isLoading) return;
-    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
+    fetchingAPI();
   }, [isLoading]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handlingScrolling);
+    const scroll = window.addEventListener("scroll", () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 300
+      ) {
+        setIsLoading(true);
+      }
+    });
     return () => {
-      window.addEventListener("scroll", handlingScrolling);
+      window.addEventListener("scroll", scroll);
     };
   }, []);
 
-  const handlingScrolling = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-      document.body.offsetHeight - 300
-    ) {
-      setIsLoading(true);
-    }
-  };
-
   useEffect(() => {
-    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
+    fetchingAPI();
   }, [photosData.query]);
 
   function inputHandler(event) {
-    setPhotosData({
-      query: event.target.value,
-      photos: [],
-      page: 1,
-      perPage: 30,
-    });
+    setInputValue(event.target.value);
+    clearTimeout(timer);
+    const newTimer = setTimeout(() => {
+      setPhotosData({
+        query: event.target.value,
+        photos: [],
+        page: 1,
+        perPage: 30,
+      });
+    }, 500);
+    setTimer(newTimer);
   }
 
   return (
     <>
       <div className={styles.heading}>
-        <h1>Image Lazy Loading</h1>
+        <h1>Image Lazy Loading and Infinite Scrolling</h1>
       </div>
       <input
         type="text"
