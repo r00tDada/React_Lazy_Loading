@@ -4,17 +4,20 @@ import styles from "./LazyImageLoading.module.css";
 import axios from "axios";
 import useLazyImageLoading from "../hooks/useLazyImageLoading";
 
-function InfiniteScroll() {
-  const [photosData, setPhotosData] = useState({
-    query: "",
-    photos: [],
-    page: 1,
-    perPage: 30,
-  });
+const initialState = {
+  query: "",
+  photos: [],
+  page: 1,
+  perPage: 30,
+};
 
-  const [isLoading, setIsLoading] = useState(true);
+function InfiniteScroll() {
+  const [photosData, setPhotosData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchingAPI = (query, page, perPage) => {
+    if (query === "") return;
+    console.log(photosData);
     axios({
       method: "GET",
       url: "https://api.unsplash.com/search/photos",
@@ -64,7 +67,7 @@ function InfiniteScroll() {
   }, []);
 
   useEffect(() => {
-    fetchingAPI(photosData.query, photosData.page, 30);
+    fetchingAPI(photosData.query, photosData.page, photosData.perPage);
   }, [photosData.query]);
 
   const handleScroll = () => {
