@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Display from "./Display";
 import styles from "./LazyImageLoading.module.css";
 import axios from "axios";
 import useLazyImageLoading from "../hooks/useLazyImageLoading";
 
 function InfiniteScroll() {
-  const [query, setQuery] = useState("");
   const [photosData, setPhotosData] = useState({
+    query: "",
     photos: [],
     page: 1,
     perPage: 30,
   });
-  const [loading, setLoading] = useState(false);
-  const getPhotos = useCallback((query, page, perPage) => {
-    setLoading(true);
+  const loading = useRef(true);
+
+  const fetchingAPI = (query, page, perPage) => {
+    loading.current = true;
     axios({
       method: "GET",
       url: "https://api.unsplash.com/search/photos",
@@ -25,6 +26,9 @@ function InfiniteScroll() {
       },
     })
       .then((data) => {
+        if (!loading.current) {
+          return;
+        }
         if (data) {
           let paginatedData = data.data.results;
           setPhotosData((prev) => {
@@ -36,29 +40,18 @@ function InfiniteScroll() {
                   : prev.photos.concat([...paginatedData]),
             };
           });
-          setLoading(false);
+          loading.current = false;
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  };
 
   useLazyImageLoading({
     threshold: 0.5,
     root: null,
   });
-
-  useEffect(() => {
-    getPhotos(query, 1, 30);
-  }, [query]);
-
-  function inputHandler(event) {
-    setQuery(event.target.value);
-    setPhotosData((prev) => {
-      return { ...prev, page: prev.page + 1 };
-    });
-  }
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -69,36 +62,43 @@ function InfiniteScroll() {
 
   const handleScroll = () => {
     if (
-      !loading &&
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
+      !loading.current &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 300
     ) {
       setPhotosData((prev) => {
+        fetchingAPI(prev.query, prev.page + 1, 30);
         return {
           ...prev,
           page: prev.page + 1,
         };
       });
-      setLoading(true);
-      getPhotos(photosData.page + 1, 30);
-      return;
     }
   };
 
-  const { photos } = photosData;
+  function inputHandler(event) {
+    let q = event.target.value;
+    loading.current = true;
+    setPhotosData({
+      query: q,
+      photos: [],
+      page: 1,
+      perPage: 30,
+    });
+    fetchingAPI(q, 1, 30);
+  }
 
   return (
     <>
-      <h1>Image Lazy Loading</h1>
+      <div className={styles.heading}>
+        <h1>Image Lazy Loading</h1>
+      </div>
       <input
         type="text"
-        value={query}
         onChange={inputHandler}
         className={styles.inputbox}
       ></input>
-      {loading ? <h1>Loading....</h1> : null}
-
-      <div className="row">
-        {photos.map((item, index) => {
+      <div>
+        {photosData.photos.map((item, index) => {
           return <Display key={index} items={item} />;
         })}
       </div>

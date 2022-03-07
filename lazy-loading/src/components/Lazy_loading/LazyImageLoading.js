@@ -52,20 +52,22 @@ function LazyImageLoading() {
 
   return (
     <>
-      <h1>Image Lazy Loading</h1>
+      <div className={styles.heading}>
+        <h1>Image Lazy Loading</h1>
+      </div>
       <input
         type="text"
         value={query}
         onChange={inputHandler}
         className={styles.inputbox}
       ></input>
-      <div className="row">
+      <div>
         {error ? <h1>Something goes wrong</h1> : null}
         {loading ? <h1>Loading....</h1> : null}
         {data.map((item, index) => {
           if (data.length === index + 1)
-            return <Display ref={lastImageRef} key={item.id} items={item} />;
-          else return <Display key={item.id} items={item} />;
+            return <Display ref={lastImageRef} key={index} items={item} />;
+          else return <Display key={index} items={item} />;
         })}
       </div>
     </>

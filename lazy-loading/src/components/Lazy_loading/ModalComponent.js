@@ -7,9 +7,6 @@ function ModalComponent({ setIsOpen, item }) {
       <div className={styles.darkBG} />
       <div className={styles.centered}>
         <div className={styles.modal}>
-          <div className={styles.modalHeader}>
-            <h5 className={styles.heading}>Clicked Image</h5>
-          </div>
           <div className={styles.modalContent}>
             <img
               src={item.urls.regular}

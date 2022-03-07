@@ -6,8 +6,8 @@ import InfiniteScroll from "./components/Lazy_loading/InfiniteScroll";
 function App() {
   return (
     <div className="App">
-      <LazyImageLoading />
-      {/* <InfiniteScroll /> */}
+      {/* <LazyImageLoading /> */}
+      <InfiniteScroll />
     </div>
   );
 }

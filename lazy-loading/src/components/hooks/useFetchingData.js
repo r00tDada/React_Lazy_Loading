@@ -13,7 +13,6 @@ function FetchingData(query, pageNumber) {
 
   useEffect(() => {
     setLoading(true);
-    let cancel;
     axios({
       method: "GET",
       url: "https://api.unsplash.com/search/photos",
@@ -23,7 +22,6 @@ function FetchingData(query, pageNumber) {
         client_id: process.env.REACT_APP_UNSPLASH_API_KEY,
         per_page: 30,
       },
-      cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((response) => {
         const resp = response.data.results;
@@ -37,12 +35,9 @@ function FetchingData(query, pageNumber) {
         setHasMore(resp.length > 0);
       })
       .catch((error) => {
-        if (axios.isCancel(error)) return;
         setError(true);
         setLoading(false);
       });
-
-    return () => cancel();
   }, [query, pageNumber]);
 
   return [
