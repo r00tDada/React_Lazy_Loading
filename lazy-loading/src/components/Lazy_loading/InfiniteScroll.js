@@ -11,6 +11,7 @@ function InfiniteScroll() {
     page: 1,
     perPage: 30,
   });
+
   const loading = useRef(true);
 
   const fetchingAPI = (query, page, perPage) => {
@@ -77,7 +78,6 @@ function InfiniteScroll() {
 
   function inputHandler(event) {
     let q = event.target.value;
-    loading.current = true;
     setPhotosData({
       query: q,
       photos: [],
