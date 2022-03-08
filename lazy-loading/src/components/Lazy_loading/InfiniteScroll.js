@@ -14,7 +14,6 @@ const initialState = {
 function InfiniteScroll() {
   const [photosData, setPhotosData] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [timer, setTimer] = useState(null);
 
   const fetchingAPI = () => {
@@ -33,14 +32,12 @@ function InfiniteScroll() {
     })
       .then((data) => {
         if (data) {
-          let paginatedData = data.data.results;
+          let currData = data.data.results;
           setPhotosData((prev) => {
             return {
               ...prev,
               photos:
-                page === 1
-                  ? [...paginatedData]
-                  : prev.photos.concat([...paginatedData]),
+                page === 1 ? [...currData] : prev.photos.concat([...currData]),
               page: prev.page + 1,
             };
           });
@@ -81,7 +78,6 @@ function InfiniteScroll() {
   }, [photosData.query]);
 
   function inputHandler(event) {
-    setInputValue(event.target.value);
     clearTimeout(timer);
     const newTimer = setTimeout(() => {
       setPhotosData({
