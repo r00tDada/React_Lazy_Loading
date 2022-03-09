@@ -19,7 +19,6 @@ function InfiniteScroll() {
   const fetchingAPI = () => {
     const { query, page, perPage } = photosData;
     if (query === "") return;
-    console.log(photosData);
     axios({
       method: "GET",
       url: "https://api.unsplash.com/search/photos",
@@ -33,6 +32,7 @@ function InfiniteScroll() {
       .then((data) => {
         if (data) {
           let currData = data.data.results;
+          // console.log(currData);
           setPhotosData((prev) => {
             return {
               ...prev,
@@ -95,12 +95,10 @@ function InfiniteScroll() {
       <div className={styles.heading}>
         <h1>Image Lazy Loading and Infinite Scrolling</h1>
       </div>
-      <input
-        type="text"
-        onChange={inputHandler}
-        className={styles.inputbox}
-      ></input>
-      <div>
+      <div className={styles.inputBox}>
+        <input type="text" onChange={inputHandler}></input>
+      </div>
+      <div className={styles.container}>
         {photosData.photos.map((item, index) => {
           return <Display key={index} items={item} />;
         })}

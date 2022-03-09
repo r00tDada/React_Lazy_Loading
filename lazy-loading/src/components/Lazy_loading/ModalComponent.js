@@ -4,7 +4,6 @@ import styles from "./Modal.module.css";
 function ModalComponent({ setIsOpen, item }) {
   return (
     <>
-      <div className={styles.darkBG} />
       <div className={styles.centered}>
         <div className={styles.modal}>
           <div className={styles.modalContent}>
