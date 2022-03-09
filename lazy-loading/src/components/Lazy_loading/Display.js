@@ -23,7 +23,7 @@ const Display = React.forwardRef(({ items }, ref) => {
           item={items}
           maskTransparency="0.9"
           width="85%"
-          height="85%"
+          height="auto"
         />
       )}
     </>

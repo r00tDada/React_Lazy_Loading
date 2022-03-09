@@ -17,16 +17,22 @@
 }
 
 .modalContent {
-  margin-left: 100px;
-  margin-right: 100px;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 1%;
+  padding-bottom: 3%;
   justify-content: center;
   align-items: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: rgb(38, 240, 179);
 }
 
+.modalContent h2 {
+  font-size: 1.5vw;
+}
+
 .modalContent p {
-  font-size: 1.2em;
+  font-size: 1vw;
 }
 
 .close {
@@ -50,12 +56,13 @@
 
 .modalImage {
   margin-top: 30px;
-  display: block;
   margin-left: auto;
   margin-right: auto;
-  object-fit: cover;
 }
 
 .modalImage img {
+  height: auto;
   max-height: 675px;
+  width: 75%;
+  object-fit: cover;
 }
