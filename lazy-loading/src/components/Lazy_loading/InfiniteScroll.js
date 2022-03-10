@@ -99,8 +99,8 @@ function InfiniteScroll() {
         <input type="text" onChange={inputHandler}></input>
       </div>
       <div className={styles.container}>
-        {photosData.photos.map((item, index) => {
-          return <Display key={index} items={item} />;
+        {photosData.photos.map((item) => {
+          return <Display key={item.id} items={item} />;
         })}
       </div>
     </>
