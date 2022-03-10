@@ -14,11 +14,11 @@
   transform: translate(-50%, -50%);
   background-color: rgb(83, 83, 83);
   z-index: 100;
+  padding: 3%;
   border-style: solid;
-  border-width: 5px;
+  border-width: 0.3vw;
   border-color: #fff;
   border-radius: 1em;
-  padding: 2%;
 }
 
 .modalContent {
@@ -37,13 +37,14 @@
 
 .modalContent p {
   font-size: 1vw;
+  color: #fff;
 }
 
 .close {
   position: absolute;
-  top: 0.3em;
-  right: 0.6em;
-  font-size: 2em;
+  top: 0.2em;
+  right: 0.4em;
+  font-size: 2vw;
   font-weight: bold;
   color: #fff;
   cursor: pointer;
@@ -58,15 +59,15 @@
   transform: rotate(-90deg);
 }
 
-.modalImage {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .modalImage img {
   height: auto;
   max-height: 675px;
-  width: 70%;
   object-fit: contain;
   box-shadow: -6px 6px 10px 5px rgba(255, 255, 255, 0.671);
+}
+
+@media only screen and (max-width: 800px) {
+  .modalImage img {
+    width: 100%;
+  }
 }
