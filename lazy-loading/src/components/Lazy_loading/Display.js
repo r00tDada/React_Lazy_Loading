@@ -22,7 +22,7 @@ const Display = React.forwardRef(({ items }, ref) => {
           isMaskVisible={true}
           item={items}
           maskTransparency="0.9"
-          width="85%"
+          width="auto"
           height="auto"
         />
       )}

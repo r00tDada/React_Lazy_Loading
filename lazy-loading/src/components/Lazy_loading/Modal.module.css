@@ -12,15 +12,19 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgb(46, 46, 46);
+  background-color: rgb(83, 83, 83);
   z-index: 100;
+  border-style: solid;
+  border-width: 5px;
+  border-color: #fff;
+  border-radius: 1em;
+  padding: 2%;
 }
 
 .modalContent {
   padding-left: 2%;
   padding-right: 2%;
   padding-top: 1%;
-  padding-bottom: 3%;
   justify-content: center;
   align-items: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -28,7 +32,7 @@
 }
 
 .modalContent h2 {
-  font-size: 1.5vw;
+  font-size: 1.4vw;
 }
 
 .modalContent p {
@@ -37,11 +41,11 @@
 
 .close {
   position: absolute;
-  top: 1em;
-  right: 1em;
-  font-size: 1.8em;
+  top: 0.3em;
+  right: 0.6em;
+  font-size: 2em;
   font-weight: bold;
-  color: #bbb;
+  color: #fff;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -55,7 +59,6 @@
 }
 
 .modalImage {
-  margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -63,6 +66,7 @@
 .modalImage img {
   height: auto;
   max-height: 675px;
-  width: 75%;
-  object-fit: cover;
+  width: 70%;
+  object-fit: contain;
+  box-shadow: -6px 6px 10px 5px rgba(255, 255, 255, 0.671);
 }
